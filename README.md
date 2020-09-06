@@ -4,7 +4,7 @@ es un middleware que gestione la tokenizacion y acceso a los endpoint mas facilm
 
 ## instalar dependencia 
  ```
- npm i --sav authmiddlewarenodejs
+ npm i --save authmiddlewarenodejs
  ```
 
 ## modulos externos que necesita

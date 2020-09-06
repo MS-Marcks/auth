@@ -17,8 +17,7 @@ function AUTH(options) {
 }
 
 function Security(req,res,next,data){
-    console.log(data.KEY_TOKEN)
-    if (typeof data !== 'undefined' || typeof data.UrlStart !== 'undefined' || typeof data.ActiveTime !== 'undefined' || typeof data.KEY_TOKEN !== 'undefined') {
+    if (typeof data === 'undefined' || typeof data.UrlStart === 'undefined' || typeof data.ActiveTime === 'undefined' || typeof data.KEY_TOKEN === 'undefined') {
        next(new Error("FALTAN CAMPOS PARA RELLENAR EN OBJETO COLOCADO EN MIDDLEWARE"))
     }else if (req.url == data.UrlStart) {
         req.GenerateToken = (option) => {

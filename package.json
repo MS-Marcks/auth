@@ -1,6 +1,6 @@
 {
   "name": "authmiddlewarenodejs",
-  "version": "1.0.3",
+  "version": "1.0.8",
   "description": "Middleware para trabajar con jsonwebtojen en express node js",
   "main": "src/index.js",
   "scripts": {

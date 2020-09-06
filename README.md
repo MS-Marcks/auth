@@ -36,33 +36,33 @@ es un middleware que gestione la tokenizacion y acceso a los endpoint mas facilm
 **nota:** debe de generar un archivo en la raiz del programa llamado **.env** y colocar la variable de entorno para estbler la llave para generacion de los token
 
 ```
-KEY_TOKEN:[cadena]
+KEY_TOKEN=[cadena]
 ```
 
   - ## ejemplo
   ```
   KEY_TOKEN: process.env.KEY_TOKEN
   o
-  KEY_TOKEN: "LLAVE PARA GENERA TOKEN"
+  KEY_TOKEN:"LLAVE PARA GENERA TOKEN"
   ```
 
 ## Ejemplo
 ```javascript
 1 const express= require('express');
-2 const auth = require('auth')
+2 const auth = require('authmiddlewarenodejs')
 3 require("dotenv").config()
 4
 5 const app = express();
-6 const corsOptions = { origin: '*' }
-7
-8 const AUTHOptions = {
-9                        UrlStart:"/api/sesion",
-10                       ActiveTime:"15m",
-11                      KEY_TOKEN:process.env.KEY_TOKEN
-12                     }
-13 app.use(auth(AUTHOptions))
-14 app.post('api/sesion'(req,res)=>{
-15    console.log(req.GenerateToken({id:30}))
+6
+7 const AUTHOptions = {
+8                        UrlStart:"/api/sesion",
+9                       ActiveTime:"15m",
+10                      KEY_TOKEN:process.env.KEY_TOKEN
+11                     }
+12 app.use(auth(AUTHOptions))
+13 app.get('/api/sesion',(req,res)=>{
+14    console.log(req.GenerateToken({id:30}))
+15    res.send(req.GenerateToken({id:30}))
 16 })
 17 app.listen(3000, () => {console.log(`http://localhost:3000`)})
 ```

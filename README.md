@@ -7,12 +7,8 @@ es un middleware que gestione la tokenizacion y acceso a los endpoint mas facilm
  npm i --save authmiddlewarenodejs
  ```
 
-## modulos externos que necesita
-- jsonwebtoken
-- dotenv
-
 ## formato de json aceptable para trabajar con auth
-```json
+```
 {
   UrlStart:"",
   ActiveTime:"",
@@ -53,21 +49,22 @@ KEY_TOKEN:[cadena]
 ## Ejemplo
 ```javascript
 1 const express= require('express');
-2 const auth = require('auth'
+2 const auth = require('auth')
 3 require("dotenv").config()
 4
 5 const app = express();
 6 const corsOptions = { origin: '*' }
 7
-8 const AUTHOptions = { UrlStart:"/api/sesion",
-9                        ActiveTime:"15m",
-10                        KEY_TOKEN:process.env.KEY_TOKEN
-11                        }
-12 app.use(auth(AUTHOptions))
-13 app.post('api/sesion'(req,res)=>{
-14    console.log(req.GenerateToken({id:30}))
-15 })
-16 app.listen(3000, () => {console.log(`http://localhost:3000`)})
+8 const AUTHOptions = {
+9                        UrlStart:"/api/sesion",
+10                       ActiveTime:"15m",
+11                      KEY_TOKEN:process.env.KEY_TOKEN
+12                     }
+13 app.use(auth(AUTHOptions))
+14 app.post('api/sesion'(req,res)=>{
+15    console.log(req.GenerateToken({id:30}))
+16 })
+17 app.listen(3000, () => {console.log(`http://localhost:3000`)})
 ```
 
 **vease:** que en la linea 14 se usa un funcion llamada **GenerateToken** es la funcion que genera el token para utilizar en el sistema en el cual se tiene que colocar parametros en un objeto para utilizar esos objetos para convertir esos datos en token 

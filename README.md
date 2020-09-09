@@ -216,13 +216,53 @@ se puede aplicar a un grupo de endopoint una tipo de token en especial para que 
       NameToken: "x-token-access-fina",
     }
   ]
-}
 ```
 veases en la propiedad **UrlGruop** que todas las rutas que empiezen con esos nombre se aplicara las las propiedades de cada elemento del grupo
 
 
 ## **ejemplo**
 
+```javascript
+ const express = require('express');
+const auth = require('authmiddlewarenodejs')
+require("dotenv").config()
+
+const app = express();
+
+const AUTHOptions = {
+    Group: [
+        {
+            UrlGruop: "/contabilidad",
+            UrlStart: "/contabilidad/login",
+            Ignore: [
+                "contabilidad/public"
+            ],
+            ActiveTime: "15m",
+            KEY_TOKEN: process.env.TOKEN_CONTA,
+            NameToken: "x-token-access-conta",
+            EncryptionMethod: "HS256"
+        },
+        {
+            UrlGruop: "/finanzas",
+            UrlStart: "/fianzaz/login",
+            ActiveTime: 60 * 60 * 60 * 24,
+            KEY_TOKEN: process.env.TOKEN_FINA,
+            NameToken: "x-token-access-fina",
+        }
+    ]
+}
+app.use(auth(AUTHOptions))
+app.get('/fianzaz/login', (req, res) => {
+    res.send(req.GenerateToken({ id: 30 }))
+})
+app.get('/contabilidad/login', (req, res) => {
+    res.send(req.GenerateToken({ id: 30 }))
+})
+app.get('/contabilidad/public', (req, res) => {
+    res.send("este endpoint no es afectado por el token")
+})
+app.listen(3000, () => { console.log(`http://localhost:3000`) })
+ ```
 
 ## License
 

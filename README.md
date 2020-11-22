@@ -110,7 +110,7 @@ EncryptionMethod: "HS512"
 
 ## **tabla de metodos aceptados**
 |METODOS|
------
+-------
 |HS256|
 |HS384|
 |HS512|
@@ -125,144 +125,37 @@ EncryptionMethod: "HS512"
 |PS512|
 
 ## Ejemplo
-```javascript
-1 const express= require('express');
-2 const auth = require('authmiddlewarenodejs')
-3 require("dotenv").config()
-4
-5 const app = express();
-6
-7 const AUTHOptions = {
-8                UrlStart:"api/session",
-9                Ignore: [
-10                  "api/public"
-11                ],
-12                ActiveTime:"15m",
-13                KEY_TOKEN:process.env.KEY_TOKEN,
-14                NameToken: "access-token",
-15                EncryptionMethod: "HS256"
-16            }
-17 app.use(auth(AUTHOptions))
-18 app.get('/api/sesion',(req,res)=>{
-19    res.send(req.GenerateToken({id:30}))
-20 })
-21 app.get('/api/public',(req,res)=>{
-22    res.send("este endpoint no es afectado por el token")
-23 })
-24 app.listen(3000, () => {console.log(`http://localhost:3000`)})
-```
-
-**vease:** que en la linea 19 se usa un funcion llamada **GenerateToken** es la funcion que genera el token para utilizar en el sistema en el cual se tiene que colocar parametros en un objeto para utilizar esos objetos para convertir esos datos en token 
-
-# GRUPOS EN DE TOKENIZACION MEDIANTE ENDPOINT
-
-se puede aplicar a un grupo de endopoint una tipo de token en especial para que tenga difertes acceso y con eso con la propiedad **Group**
-
-## **nota**:
-
--  la propiedad Gruop aplica los mismos parametros que si solo una se usara
-
-### **ejmplo**
-
-```
-{
-  Group:[
-    {
-      UrlGruop:"",
-      UrlStart:"",
-      Ignore: [],
-      ActiveTime:"",
-      KEY_TOKEN:"",
-      NameToken: "",
-      EncryptionMethod: ""
-    },
-     {
-      UrlGruop:"",
-      UrlStart:"",
-      Ignore: [],
-      ActiveTime:"",
-      KEY_TOKEN:"",
-      NameToken: "",
-      EncryptionMethod: ""
-    }
-  ]
-}
-```
-
-# **Nota**
-- vease que ahi se coloco una  propied conocida como **UrlGruop** ese servira para separa los grupos de las apis 
-
-- puede colocar tantos grupos quiera 
-
-```
-{
-  Group:[
-    {
-      UrlGruop:"/contabilidad",
-      UrlStart:"/contabilidad/login",
-      Ignore: [
-        "contabilidad/public"
-      ],
-      ActiveTime:"15m",
-      KEY_TOKEN:process.env.TOKEN_CONTA,
-      NameToken: "x-token-access-conta",
-      EncryptionMethod: "HS256"
-    },
-     {
-      UrlGruop:"/finanzas",
-      UrlStart:"/fianzaz/login",
-      ActiveTime:60*60*60*24,
-      KEY_TOKEN:process.env.TOKEN_FINA,
-      NameToken: "x-token-access-fina",
-    }
-  ]
-```
-veases en la propiedad **UrlGruop** que todas las rutas que empiezen con esos nombre se aplicara las las propiedades de cada elemento del grupo
-
-
-## **ejemplo**
-
-```javascript
- const express = require('express');
+```js
+const express = require('express');
 const auth = require('authmiddlewarenodejs')
 require("dotenv").config()
 
 const app = express();
 
 const AUTHOptions = {
-    Group: [
-        {
-            UrlGruop: "/contabilidad",
-            UrlStart: "/contabilidad/login",
-            Ignore: [
-                "contabilidad/public"
-            ],
-            ActiveTime: "15m",
-            KEY_TOKEN: process.env.TOKEN_CONTA,
-            NameToken: "x-token-access-conta",
-            EncryptionMethod: "HS256"
-        },
-        {
-            UrlGruop: "/finanzas",
-            UrlStart: "/fianzaz/login",
-            ActiveTime: 60 * 60 * 60 * 24,
-            KEY_TOKEN: process.env.TOKEN_FINA,
-            NameToken: "x-token-access-fina",
-        }
-    ]
+    UrlStart: "/session",
+    Ignore: [
+        "/public"
+    ],
+    ActiveTime: "15m",
+    KEY_TOKEN: process.env.KEY_TOKEN,
+    NameToken: "access-token",
+    EncryptionMethod: "HS256"
 }
-app.use(auth(AUTHOptions))
-app.get('/fianzaz/login', (req, res) => {
+app.use('/api', auth(AUTHOptions))
+app.get('/api/session', (req, res) => {
     res.send(req.GenerateToken({ id: 30 }))
 })
-app.get('/contabilidad/login', (req, res) => {
-    res.send(req.GenerateToken({ id: 30 }))
+app.get('/api/holamundo', (req, res) => {
+    res.send('hola mundo') // en esta url no pasara porque es afectado por el auth
 })
-app.get('/contabilidad/public', (req, res) => {
-    res.send("este endpoint no es afectado por el token")
+app.get('/public', (req, res) => {
+    res.send('hola mundo') // en esta url si pasara porque no es afectado por el auth
 })
 app.listen(3000, () => { console.log(`http://localhost:3000`) })
- ```
+```
+
+**vease:** que en la linea de **/api/session** se usa un funcion llamada **GenerateToken** es la funcion que genera el token para utilizar en el sistema en el cual se tiene que colocar parametros en un objeto para utilizar esos objetos para convertir esos datos en token 
 
 ## License
 

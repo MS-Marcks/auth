@@ -12,22 +12,8 @@ function AUTH(options) {
         }
     }
     return function AUTH(req, res, next) {
-        if (typeof opts.Group !== 'undefined') {
-            GetterGroup(req, res, next, opts)
-        } else {
-            Security(req, res, next, opts)
-        }
+        Security(req, res, next, opts)
     }
-}
-function GetterGroup(req, res, next, opts) {
-    opts.Group.forEach(e => {
-        let UrlTmpGruop = Filter(e.UrlGruop.split("/"))
-        let UrlTmp = Filter(req.url.split("/"))
-        let count = 0;
-        for (let i = 0; i < UrlTmpGruop.length; i++) { if (UrlTmpGruop[i] == UrlTmp[i]) { count++; } }
-        if (count == (UrlTmpGruop.length)) { Security(req, res, next, e) }
-    });
-    return next(new Error("NO SE ENCONTRO LA URL DE GRUPO"))
 }
 
 function Filter(array) { return array.filter(function (el) { return el != ""; }); }
@@ -46,6 +32,7 @@ function Security(req, res, next, data) {
     }
     if (typeof data === 'undefined' || typeof data.UrlStart === 'undefined' || typeof data.KEY_TOKEN === 'undefined' || typeof data.NameToken === 'undefined') {
         return next(new Error("FALTAN CAMPOS PARA RELLENAR EN OBJETO COLOCADO EN MIDDLEWARE"))
+
     } else if (req.url == data.UrlStart) {
         let optsToken = {}
         if (typeof data.EncryptionMethod !== 'undefined') {
